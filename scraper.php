@@ -12,7 +12,7 @@ require 'rb.php';
 require 'simple_html_dom.php';  
 R::setup('sqlite:data.sqlite');
 
-R::nuke();
+//R::nuke();
 
 function url_get_contents ($url) {
 
@@ -108,6 +108,8 @@ function getUsers($url){
     if($nextpage = $dom->find('div.pagination a.next_page',0)->href)
         getUsers($GLOBALS['baseurl'].$nextpage);
 
+    $dom->clear();
+
 }
 
 
@@ -134,6 +136,8 @@ function getUserDetail($users)
     $users->following = $dom->find('div.vcard-stats a.vcard-stat',2)->find('strong',0)->plaintext;
 
     $users->contributions = preg_replace( "/[^\d]/", "", $dom->find('div.contrib-column-first span.contrib-number',0) );
+
+    $dom->clear();
 
     return R::store($users);
 
