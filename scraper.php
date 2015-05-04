@@ -1,8 +1,8 @@
 <?
 
-if(!isset( $_SERVER['MORPH_SESSION'] ))
+if(!isset( $_SERVER['MORPH_USER_SESSION'] ) && !isset( $_SERVER['MORPH__GH_SESS'] ))
 {
-    echo "you need to set the session variable in scraper settings under 'MORPH_SESSION'\n";
+    echo "you need to set the session variable in scraper settings under 'MORPH_USER_SESSION' and 'MORPH__GH_SESS'\n";
     echo "showing all variables \n";
     var_dump(  get_defined_vars() ); 
     die;
@@ -14,25 +14,37 @@ R::setup('sqlite:data.sqlite');
 
 //R::nuke();
 
+function url_get_contents ($url) {
+
+    //$url = 'http://myhttp.info/';
+
+    if (!function_exists('curl_init')){ 
+        die('CURL is not installed!');
+    }
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $headers = array();
+    $headers[] = "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+    $headers[] = "Accept-Encoding: gzip, deflate";
+    $headers[] = "Accept-Language: en-US,en;q=0.5";
+    $headers[] = "Connection: keep-alive";
+    $headers[] = "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0";
+    $headers[] = "Cookie: logged_in=yes; _ga=GA1.2.1030011918.1427507368; _octo=GH1.1.1923536842.1427507370; user_session=".$_SERVER['MORPH_USER_SESSION']."; dotcom_user=jaseclamp; tz=Australia%2FBrisbane; _gh_sess=".$_SERVER['MORPH__GH_SESS']."; _gat=1";
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch,CURLOPT_ENCODING, '');
+
+    $output = curl_exec($ch);
+    curl_close($ch);
+    return $output;
+}
+
 $topics = array('PHP','JavaScript','CSS');
 $locations = array('brisbane','sydney','qld','nsw','australia','zealand','queensland','new+south+wales','victoria','melbourne');
 $baseurl = 'https://github.com';
 
-//these values need to be updated from your browser
-$opts = array(
-            'http'=>array(
-                'method'=>"GET",
-                'header'=>
-                    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n".
-                    "Accept-Encoding: gzip, deflate\r\n".
-                    "Accept-Language: en-US,en;q=0.5\r\n".
-                    "Connection: keep-alive\r\n".
-                    "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0\r\n".
-                    "Cookie: logged_in=yes; _ga=GA1.2.1030011918.1427507368; _octo=GH1.1.1923536842.1427507370; user_session=".$_SERVER['MORPH_SESSION']."; dotcom_user=jaseclamp; tz=Australia%2FBrisbane"
-            )
-        );
-        
-$context = stream_context_create($opts);
+
 
 //load uids into array to save 1000s of sqlite queries
 $uids = R::getAll('select uid from data');
@@ -61,7 +73,7 @@ endforeach;
 
 function getUsers($url){
 
-	$html = file_get_contents($url,0,$GLOBALS['context']);
+	$html = url_get_contents($url);
 	$dom = new simple_html_dom();
 	$dom->load($html);
 
@@ -85,7 +97,6 @@ function getUsers($url){
            echo " -- saved";
         }
 
-        die;
 
 	}
 
@@ -98,7 +109,7 @@ function getUsers($url){
 
 function getUserDetail($users)
 {
-    $html = file_get_contents( $users->url ,0, $GLOBALS['context'] );
+    $html = url_get_contents( $users->url );
     $dom = new simple_html_dom();
     $dom->load($html);
 
