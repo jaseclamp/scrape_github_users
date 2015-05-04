@@ -1,6 +1,12 @@
 <?
 
-echo var_dump(  get_defined_vars() ); die;
+if(!isset( $_SERVER['MORPH_SESSION'] ))
+{
+    echo "you need to set the session variable in scraper settings under 'MORPH_SESSION'\n";
+    echo "showing all variables \n";
+    var_dump(  get_defined_vars() ); 
+    die;
+}
 
 require 'rb.php';
 require 'simple_html_dom.php';  
@@ -22,7 +28,7 @@ $opts = array(
                     "Accept-Language: en-US,en;q=0.5\r\n".
                     "Connection: keep-alive\r\n".
                     "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0\r\n".
-                    "Cookie: logged_in=yes; _ga=GA1.2.1030011918.1427507368; _octo=GH1.1.1923536842.1427507370; user_session=".$MORPH_SESSION."; dotcom_user=jaseclamp; tz=Australia%2FBrisbane"
+                    "Cookie: logged_in=yes; _ga=GA1.2.1030011918.1427507368; _octo=GH1.1.1923536842.1427507370; user_session=".$_SERVER['MORPH_SESSION']."; dotcom_user=jaseclamp; tz=Australia%2FBrisbane"
             )
         );
         
