@@ -2,7 +2,7 @@
 
 if(!isset( $_SERVER['MORPH_USER_SESSION'] ) && !isset( $_SERVER['MORPH__GH_SESS'] ))
 {
-    echo "you need to set the session variable in scraper settings under 'MORPH_USER_SESSION' and 'MORPH__GH_SESS'\n";
+    echo "you need to set the session variable in scraper settings under 'MORPH_USER_SESSION' and 'MORPH__GH_SESS' copy paste from your cookie - no line breaks\n";
     echo "showing all variables \n";
     var_dump(  get_defined_vars() ); 
     die;
@@ -57,8 +57,6 @@ foreach($uids as $uid) $_uids[] = $uid['uid'];
 foreach($topics as $topic):
 foreach($locations as $location):
 
-    $curr = $topic . " :: " . $location;
-
 	//results limited to 1k so specific is good.
 	$url = 'https://github.com/search?utf8=%E2%9C%93&q=language%3A'.$topic.'+location%3A'.$location.'&type=Users&ref=advsearch';
 
@@ -81,14 +79,15 @@ function getUsers($url){
 	{
 		$uid = substr( $user->find('a[href^=/]',0)->href , 1 ); 
 
-        echo "\n" . $GLOBALS['curr'] . " : " . $uid;
+        echo "\n" . $GLOBALS['topic'] . " :: " . $GLOBALS['location'] . " : " . $uid;
 
 		//skip if have
 		if( in_array( $uid , $GLOBALS['uids'] )  ) { echo " -- already have"; continue; }
             
         $users = R::dispense('data');
-        $users->url = $GLOBALS['baseurl'] . '/' . $uid;
+        $users->profile_url = $GLOBALS['baseurl'] . '/' . $uid;
         $users->uid = $uid;
+        $users->lanuage = $GLOBALS['topic'];
         
         //go detail page, easier to get rest of info from that.
         if( getUserDetail($users) > 0 )
@@ -118,6 +117,8 @@ function getUserDetail($users)
     $users->worksfor = $dom->find('li[itemprop=worksFor]',0)->plaintext;
     $users->url = $dom->find('li[itemprop=url] a',0)->href;
     $users->joined = $dom->find('time.join-date',0)->datetime;
+
+    $users->avatar = $dom->find('img.avatar',0)->src; 
 
     $users->folowers = $dom->find('div.vcard-stats a.vcard-stat',0)->find('strong',0)->plaintext;
     $users->starred = $dom->find('div.vcard-stats a.vcard-stat',1)->find('strong',0)->plaintext;
