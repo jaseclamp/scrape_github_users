@@ -105,7 +105,7 @@ function getUsers($url){
 	}
 
     $nextpage = $dom->find('div.pagination a.next_page',0)->href;
-    $dom->clear();
+    $dom->clear(); unset($dom,$user,$users);
 
     //is there another page??? get that beast.
     if($nextpage)
@@ -140,7 +140,7 @@ function getUserDetail($users)
 
     $users->contributions = preg_replace( "/[^\d]/", "", $dom->find('div.contrib-column-first span.contrib-number',0) );
 
-    $dom->clear();
+    $dom->clear(); unset($dom);
 
     return R::store($users);
 
