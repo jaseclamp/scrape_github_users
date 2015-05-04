@@ -93,10 +93,12 @@ function getUsers($url){
         $users->lanuage = $GLOBALS['topic'];
         
         //go detail page, easier to get rest of info from that.
-        if( getUserDetail($users) > 0 )
+        if( getUserDetail($users) )
         {    
            $GLOBALS['uids'][] = $uid;
            echo " -- saved";
+        }else{
+            unset($users);
         }
 
 
@@ -114,6 +116,8 @@ function getUserDetail($users)
     $html = url_get_contents( $users->url );
     $dom = new simple_html_dom();
     $dom->load($html);
+
+    if( ! $dom->find('span.vcard-fullname',0) ) { echo " -- must be an org profile"; return false; }
 
     $users->name = $dom->find('span.vcard-fullname',0)->plaintext;
     $users->location = $dom->find('li[itemprop=homeLocation]',0)->plaintext;
