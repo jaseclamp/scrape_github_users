@@ -12,7 +12,7 @@ require 'rb.php';
 require 'simple_html_dom.php';  
 R::setup('sqlite:data.sqlite');
 
-R::nuke();
+//R::nuke();
 
 function url_get_contents ($url) {
 
