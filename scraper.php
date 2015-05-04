@@ -104,11 +104,14 @@ function getUsers($url){
 
 	}
 
+    $nextpage = $dom->find('div.pagination a.next_page',0)->href;
+    $dom->clear();
+
     //is there another page??? get that beast.
-    if($nextpage = $dom->find('div.pagination a.next_page',0)->href)
+    if($nextpage)
         getUsers($GLOBALS['baseurl'].$nextpage);
 
-    $dom->clear();
+    
 
 }
 
