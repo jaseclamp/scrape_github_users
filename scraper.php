@@ -1,6 +1,6 @@
 <?
 
-echo $MORPH_SESSION; die;
+echo var_dump(  get_defined_vars() ); die;
 
 require 'rb.php';
 require 'simple_html_dom.php';  
