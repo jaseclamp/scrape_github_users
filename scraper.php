@@ -18,6 +18,9 @@ function url_get_contents ($url) {
 
     //$url = 'http://myhttp.info/';
 
+    //rate limit? 
+    sleep( rand( 0, 3 ) );
+
     if (!function_exists('curl_init')){ 
         die('CURL is not installed!');
     }
