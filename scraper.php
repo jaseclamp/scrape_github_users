@@ -122,7 +122,7 @@ function getUserDetail($users)
     $users->name = $dom->find('span.vcard-fullname',0)->plaintext;
     $users->location = trim( $dom->find('li[itemprop=homeLocation]',0)->plaintext );
     //sneaky character encoding
-    $users->email = preg_replace_callback('/&#x([0-9a-f]{2});/', function ($m) { return chr(hexdec($m[1])) },  $dom->find('a.email',0)->plaintext );
+    $users->email = preg_replace_callback('/&#x([0-9a-f]{2});/', function ($m) { return chr(hexdec($m[1])); },  $dom->find('a.email',0)->plaintext );
     $users->worksfor = trim( $dom->find('li[itemprop=worksFor]',0)->plaintext );
     $users->url = $dom->find('li[itemprop=url] a',0)->href;
     $users->joined = $dom->find('time.join-date',0)->datetime;
