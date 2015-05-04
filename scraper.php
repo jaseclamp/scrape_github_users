@@ -120,8 +120,9 @@ function getUserDetail($users)
     if( ! $dom->find('span.vcard-fullname',0) ) { echo " -- must be an org profile"; return false; }
 
     $users->name = $dom->find('span.vcard-fullname',0)->plaintext;
-    $users->location = $dom->find('li[itemprop=homeLocation]',0)->plaintext;
-    $users->worksfor = $dom->find('li[itemprop=worksFor]',0)->plaintext;
+    $users->location = trim( $dom->find('li[itemprop=homeLocation]',0)->plaintext );
+    $users->email = $dom->find('a.email',0)->plaintext;
+    $users->worksfor = trim( $dom->find('li[itemprop=worksFor]',0)->plaintext );
     $users->url = $dom->find('li[itemprop=url] a',0)->href;
     $users->joined = $dom->find('time.join-date',0)->datetime;
 
