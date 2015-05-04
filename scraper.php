@@ -61,7 +61,7 @@ endforeach;
 
 function getUsers($url){
 
-	$html = file_get_contents($url);
+	$html = file_get_contents($url,0,$GLOBALS['context']);
 	$dom = new simple_html_dom();
 	$dom->load($html);
 
@@ -98,7 +98,7 @@ function getUsers($url){
 
 function getUserDetail($users)
 {
-    $html = file_get_contents( $users->url );
+    $html = file_get_contents( $users->url ,0, $GLOBALS['context'] );
     $dom = new simple_html_dom();
     $dom->load($html);
 
