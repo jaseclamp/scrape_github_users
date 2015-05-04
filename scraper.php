@@ -125,7 +125,7 @@ function getUserDetail($users)
     $users->url = $dom->find('li[itemprop=url] a',0)->href;
     $users->joined = $dom->find('time.join-date',0)->datetime;
 
-    $users->avatar = $dom->find('div.container img.avatar',0)->src; 
+    $users->avatar = $dom->find('div.site-container img.avatar',0)->src; 
 
     $users->folowers = $dom->find('div.vcard-stats a.vcard-stat',0)->find('strong',0)->plaintext;
     $users->starred = $dom->find('div.vcard-stats a.vcard-stat',1)->find('strong',0)->plaintext;
