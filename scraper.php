@@ -113,7 +113,7 @@ function getUsers($url){
 
 function getUserDetail($users)
 {
-    $html = url_get_contents( $users->url );
+    $html = url_get_contents( $users->profile_url );
     $dom = new simple_html_dom();
     $dom->load($html);
 
