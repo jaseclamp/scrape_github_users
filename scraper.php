@@ -12,7 +12,9 @@ require 'rb.php';
 require 'simple_html_dom.php';  
 R::setup('sqlite:data.sqlite');
 
-//R::nuke();
+if( isset( $_SERVER['MORPH_NUKE'] ) )
+	if ( $_SERVER['MORPH_NUKE'] == 'Y' ) 
+		R::nuke();
 
 function url_get_contents ($url) {
 
