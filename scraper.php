@@ -43,7 +43,7 @@ function url_get_contents ($url) {
     return $output;
 }
 
-$topics = array('PHP','JavaScript','CSS');
+$topics = array('JavaScript','SASS','Stylus','SCSS','Less','CSS','HTML');
 $locations = array('brisbane','sydney','qld','nsw','australia','zealand','queensland','new+south+wales','victoria','melbourne');
 $baseurl = 'https://github.com';
 
