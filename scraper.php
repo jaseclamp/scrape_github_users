@@ -124,8 +124,11 @@ function getUserDetail($users)
     $dom = new simple_html_dom();
     $dom->load($html);
 
-    if( ! $dom->find('span.vcard-fullname',0) ) { //echo " -- must be an org profile"; 
-    return false; }
+    if( ! $dom->find('span.vcard-fullname',0) ) { 
+    	//echo " -- must be an org profile"; 
+    	echo $html; die; 
+    	return false; 
+    }
 
     $users->name = $dom->find('span.vcard-fullname',0)->plaintext;
     $users->location = trim( $dom->find('li[itemprop=homeLocation]',0)->plaintext );
