@@ -45,7 +45,7 @@ function url_get_contents ($url) {
     return $output;
 }
 
-$topics = array('JavaScript','SASS','Stylus','SCSS','Less','CSS','HTML');
+$topics = array('JavaScript', 'PHP', 'Ruby', 'Python', 'Java', 'C%23', 'CSS', 'C', 'C%2B%2B');
 $locations = array('brisbane','sydney','qld','nsw','australia','zealand','queensland','new+south+wales','victoria','melbourne');
 $baseurl = 'https://github.com';
 
@@ -79,29 +79,30 @@ function getUsers($url){
 	$html = url_get_contents($url);
 	$dom = new simple_html_dom();
 	$dom->load($html);
-
+	
+	echo "\n" . $GLOBALS['topic'] . " :: " . $GLOBALS['location'];
+	
 	foreach($dom->find('div.user-list-item') as $user)
 	{
 		$uid = substr( $user->find('a[href^=/]',0)->href , 1 ); 
-
-        echo "\n" . $GLOBALS['topic'] . " :: " . $GLOBALS['location'] . " : " . $uid;
-
+	
 		//skip if have
 		if( in_array( $uid , $GLOBALS['uids'] )  ) { echo " -- already have"; continue; }
             
-        $users = R::dispense('data');
-        $users->profile_url = $GLOBALS['baseurl'] . '/' . $uid;
-        $users->uid = $uid;
-        $users->lanuage = $GLOBALS['topic'];
-        
-        //go detail page, easier to get rest of info from that.
-        if( getUserDetail($users) )
-        {    
-           $GLOBALS['uids'][] = $uid;
-           echo " -- saved";
-        }else{
-            unset($users);
-        }
+	        $users = R::dispense('data');
+	        $users->profile_url = $GLOBALS['baseurl'] . '/' . $uid;
+	        $users->uid = $uid;
+	        if ( $user->find('a[class=email]',0) ) $users->email = $user->find('a[class=email]',0)->text; 
+	        $users->lanuage = $GLOBALS['topic'];
+	        
+	        //go detail page, easier to get rest of info from that.
+	        if( getUserDetail($users) )
+	        {    
+	           $GLOBALS['uids'][] = $uid;
+	           //echo " -- saved";
+	        }else{
+	            unset($users);
+	        }
 
 
 	}
