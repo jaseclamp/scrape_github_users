@@ -126,7 +126,7 @@ function getUserDetail($users)
 
     if( ! $dom->find('span.vcard-fullname',0) ) { 
     	//echo " -- must be an org profile"; 
-    	echo $html; die; 
+    	echo $dom->find('body',0)->plaintext; die; 
     	return false; 
     }
 
