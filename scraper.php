@@ -70,7 +70,7 @@ foreach($locations as $location):
 	//results limited to 1k so specific is good.
 	$url = 'https://github.com/search?utf8=%E2%9C%93&q=language%3A'.$topic.'+location%3A'.$location.'&type=Users&ref=advsearch';
 
-	echo "\n".$url;
+	var_dump ($url);
 
 	//get first page users.. recurse by looking at pagination next
 	getUsers($url);
@@ -129,7 +129,7 @@ function getUsers($url){
 function getUserDetail($users)
 {
     
-    echo "\n".$users->profile_url;
+    var_dump( $users->profile_url );
     
     $html = url_get_contents( $users->profile_url );
     $dom = new simple_html_dom();
