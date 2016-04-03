@@ -65,10 +65,11 @@ foreach($locations as $location):
 	//results limited to 1k so specific is good.
 	$url = 'https://github.com/search?utf8=%E2%9C%93&q=language%3A'.$topic.'+location%3A'.$location.'&type=Users&ref=advsearch';
 
+	echo "\n" . $topic . " :: " . $location;
+
 	//get first page users.. recurse by looking at pagination next
 	getUsers($url);
-
-
+	
 endforeach;
 endforeach;
 
@@ -79,8 +80,6 @@ function getUsers($url){
 	$html = url_get_contents($url);
 	$dom = new simple_html_dom();
 	$dom->load($html);
-	
-	echo "\n" . $GLOBALS['topic'] . " :: " . $GLOBALS['location'];
 	
 	foreach($dom->find('div.user-list-item') as $user)
 	{
@@ -125,7 +124,8 @@ function getUserDetail($users)
     $dom = new simple_html_dom();
     $dom->load($html);
 
-    if( ! $dom->find('span.vcard-fullname',0) ) { echo " -- must be an org profile"; return false; }
+    if( ! $dom->find('span.vcard-fullname',0) ) { //echo " -- must be an org profile"; 
+    return false; }
 
     $users->name = $dom->find('span.vcard-fullname',0)->plaintext;
     $users->location = trim( $dom->find('li[itemprop=homeLocation]',0)->plaintext );
