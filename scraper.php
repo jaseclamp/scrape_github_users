@@ -106,7 +106,7 @@ function getUsers($url){
 	        if( getUserDetail($users) )
 	        {    
 	           $GLOBALS['uids'][] = $uid;
-	           //echo " -- saved";
+	           echo " -- saved";
 	        }else{
 	            unset($users);
 	        }
