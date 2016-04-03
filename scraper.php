@@ -124,13 +124,13 @@ function getUserDetail($users)
     $dom = new simple_html_dom();
     $dom->load($html);
 
-    if( ! $dom->find('span.vcard-fullname',0) ) { 
+    if( ! $dom->find('.vcard-fullname',0) ) { 
     	//echo " -- must be an org profile"; 
-    	echo $dom->find('body',0)->plaintext; die; 
+    	//echo $dom->find('body',0)->plaintext; die; 
     	return false; 
     }
 
-    $users->name = $dom->find('span.vcard-fullname',0)->plaintext;
+    $users->name = $dom->find('div.vcard-fullname',0)->plaintext;
     $users->location = trim( $dom->find('li[itemprop=homeLocation]',0)->plaintext );
     //sneaky character encoding
     $users->email = preg_replace_callback('/&#x([0-9a-f]{2});/', function ($m) { return chr(hexdec($m[1])); },  $dom->find('a.email',0)->plaintext );
