@@ -62,10 +62,15 @@ foreach($uids as $uid) $_uids[] = $uid['uid'];
 foreach($topics as $topic):
 foreach($locations as $location):
 
-	echo "\n" . $topic . " :: " . $location;
+	//echo "\n" . $topic . " :: " . $location;
+
+	var_dump($topic);
+	var_dump($location);
 
 	//results limited to 1k so specific is good.
 	$url = 'https://github.com/search?utf8=%E2%9C%93&q=language%3A'.$topic.'+location%3A'.$location.'&type=Users&ref=advsearch';
+
+	echo "\n".$url;
 
 	//get first page users.. recurse by looking at pagination next
 	getUsers($url);
@@ -86,8 +91,10 @@ function getUsers($url){
 		$uid = substr( $user->find('a[href^=/]',0)->href , 1 ); 
 	
 		//skip if have
-		if( in_array( $uid , $GLOBALS['uids'] )  ) { //echo " -- already have"; 
-		continue; }
+		if( in_array( $uid , $GLOBALS['uids'] )  ) { 
+			echo " -- already have"; 
+			continue; 
+		}
             
 	        $users = R::dispense('data');
 	        $users->profile_url = $GLOBALS['baseurl'] . '/' . $uid;
@@ -129,7 +136,7 @@ function getUserDetail($users)
     $dom->load($html);
 
     if( ! $dom->find('.vcard-fullname',0) ) { 
-    	//echo " -- must be an org profile"; 
+    	echo " -- must be an org profile"; 
     	//echo $dom->find('body',0)->plaintext; die; 
     	return false; 
     }
